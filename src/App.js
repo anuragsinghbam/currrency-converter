@@ -19,9 +19,10 @@ export default function App() {
   const [sourceCurrencyCode, setSourceCurrencyCode] = useState('USD')
   const [targetCurrencyCode, setTargetCurrencyCode] = useState('INR')
   const [sourceCurrencyValue, setSourceCurrencyValue] = useState(1)
-  const [targetCurrencyValue, setTargetCurrencyValue] = useState()
-  const [conversionRate, setConversionRate] = useState()
+  const [targetCurrencyValue, setTargetCurrencyValue] = useState(1)
+  const [conversionRate, setConversionRate] = useState(73.1717)
   const [trackChange, setTrackChange] = useState(true)
+  
 
   useEffect(() => {
     fetch(BASE_URL + 'USD')

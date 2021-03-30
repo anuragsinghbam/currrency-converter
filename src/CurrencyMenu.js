@@ -9,21 +9,23 @@ export default function CurrencyMenu(props) {
     changeCurrency,
     countryName,
     value,
-    changeValue
+    changeValue,
   } = props
 
   return (
     <div className='currency-menu'>
       <div className='currency-details'>
         <div className='country'>
-          <img src={flagUrl} />
+          <img src={flagUrl} alt={countryName + ' Flag'} />
           <p>{countryName}</p>
         </div>
       </div>
 
       <select value={currencyCode} onChange={changeCurrency}>
         {currencyList.map((currency) => (
-          <option key={currency} value={currency}>{currency}</option>
+          <option key={currency} value={currency}>
+            {currency}
+          </option>
         ))}
       </select>
 
