@@ -1,74 +1,116 @@
 import './App.css'
 import React, { useEffect, useState } from 'react'
-import CurrencyInput from './CurrencyInput'
+import CurrencyMenu from './CurrencyMenu'
 
-const BASE_URL = 'https://api.exchangeratesapi.io/latest?base='
+const BASE_URL =
+  'https://v6.exchangerate-api.com/v6/a707d1172e88c17d8379cd71/latest/'
+
+const ENRICHED_URL =
+  'https://v6.exchangerate-api.com/v6/a707d1172e88c17d8379cd71/enriched/'
 
 export default function App() {
   const [currencyList, setCurrencyList] = useState([])
-  const [sourceCurrency, setSourceCurrency] = useState()
-  const [targetCurrency, setTargetCurrency] = useState()
-  const [value, setValue] = useState(1)
-  const [targetValue, setTargetValue] = useState(true)
-  const [exchangeRate, setExchangeRate] = useState()
-
-  let sourceAmount, targetAmount
-
-  if (targetValue) {
-    sourceAmount = value
-    targetAmount = value * exchangeRate
-  } else {
-    targetAmount = value
-    sourceAmount = value / exchangeRate
-  }
+  const [sourceCurrencyName, setSourceCurrencyName] = useState('')
+  const [targetCurrencyName, setTargetCurrencyName] = useState('')
+  const [sourceCountryFlag, setSourceCountryFlag] = useState('')
+  const [targetCountryFlag, setTargetCountryFlag] = useState('')
+  const [sourceCountryName, setSourceCountryName] = useState('')
+  const [targetCountryName, setTargetCountryName] = useState('')
+  const [sourceCurrencyCode, setSourceCurrencyCode] = useState('USD')
+  const [targetCurrencyCode, setTargetCurrencyCode] = useState('INR')
+  const [sourceCurrencyValue, setSourceCurrencyValue] = useState(1)
+  const [targetCurrencyValue, setTargetCurrencyValue] = useState()
+  const [conversionRate, setConversionRate] = useState()
+  const [trackChange, setTrackChange] = useState(true)
 
   useEffect(() => {
     fetch(BASE_URL + 'USD')
       .then((res) => res.json())
       .then((data) => {
-        setCurrencyList(Object.keys(data.rates))
-        setSourceCurrency(data.base)
-        setTargetCurrency(Object.keys(data.rates)[11])
+        setCurrencyList(Object.keys(data.conversion_rates))
       })
   }, [])
 
   useEffect(() => {
-    if (sourceCurrency != null && targetCurrency != null) {
-      fetch(BASE_URL + sourceCurrency)
-        .then((res) => res.json())
-        .then((data) => setExchangeRate(data.rates[targetCurrency]))
-    }
-  }, [targetCurrency, sourceCurrency])
+    fetch(ENRICHED_URL + sourceCurrencyCode + '/' + sourceCurrencyCode)
+      .then((res) => res.json())
+      .then((data) => {
+        setSourceCurrencyName(data.target_data.currency_name)
+        setSourceCountryFlag(data.target_data.flag_url)
+        setSourceCountryName(data.target_data.locale)
+        setSourceCurrencyCode(data.target_code)
+        if (trackChange) {
+          setTargetCurrencyValue(sourceCurrencyValue * conversionRate)
+        } else {
+          setSourceCurrencyValue(targetCurrencyValue / conversionRate)
+        }
+      })
+  }, [
+    sourceCurrencyCode,
+    targetCurrencyCode,
+    conversionRate,
+    sourceCurrencyValue,
+    targetCurrencyValue,
+  ])
 
-  function handleSourceChange(e) {
-    setValue(e.target.value)
-    setTargetValue(true)
+  useEffect(() => {
+    fetch(ENRICHED_URL + sourceCurrencyCode + '/' + targetCurrencyCode)
+      .then((res) => res.json())
+      .then((data) => {
+        setTargetCurrencyName(data.target_data.currency_name)
+        setTargetCountryFlag(data.target_data.flag_url)
+        setTargetCountryName(data.target_data.locale)
+        setTargetCurrencyCode(data.target_code)
+        setConversionRate(data.conversion_rate)
+      })
+  }, [
+    sourceCurrencyCode,
+    targetCurrencyCode,
+    conversionRate,
+    sourceCurrencyValue,
+    targetCurrencyValue,
+  ])
+
+  function changeCurrency(e) {
+    setSourceCurrencyCode(e.target.value)
   }
 
-  function handleTargetChange(e) {
-    setValue(e.target.value)
-    setTargetValue(false)
+  function changeTargetCurrency(e) {
+    setTargetCurrencyCode(e.target.value)
+  }
+
+  function changeSourceCurrencyValue(e) {
+    setSourceCurrencyValue(e.target.value)
+    setTrackChange(true)
+  }
+
+  function changeTargetCurrencyValue(e) {
+    setTargetCurrencyValue(e.target.value)
+    setTrackChange(false)
   }
 
   return (
     <div className='App'>
-      <h1>Convert</h1>
-      <CurrencyInput
+      <CurrencyMenu
+        flagUrl={sourceCountryFlag}
+        currencyName={sourceCurrencyName}
+        currencyCode={sourceCurrencyCode}
         currencyList={currencyList}
-        currentCurrency={sourceCurrency}
-        changeCurrency={(e) => setSourceCurrency(e.target.value)}
-        amount={sourceAmount}
-        onChangeValue={handleSourceChange}
+        changeCurrency={changeCurrency}
+        countryName={sourceCountryName}
+        value={sourceCurrencyValue}
+        changeValue={changeSourceCurrencyValue}
       />
-      <div>=</div>
-      <CurrencyInput
+      <CurrencyMenu
+        flagUrl={targetCountryFlag}
+        currencyName={targetCurrencyName}
+        currencyCode={targetCurrencyCode}
         currencyList={currencyList}
-        currentCurrency={targetCurrency}
-        changeCurrency={(e) => setTargetCurrency(e.target.value)}
-        amount={targetAmount}
-        onChangeValue={handleTargetChange}
+        changeCurrency={changeTargetCurrency}
+        countryName={targetCountryName}
+        value={targetCurrencyValue}
+        changeValue={changeTargetCurrencyValue}
       />
     </div>
   )
 }
-

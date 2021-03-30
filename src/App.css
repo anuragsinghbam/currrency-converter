@@ -1,8 +1,42 @@
 body {
-  background: skyblue;
-  text-align: center;
+  margin: 0;
 }
 
-input {
-  padding: 0.25em;
+.currency-menu {
+  display: flex;
+  width: 80%;
+  margin: 2em auto 5em;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #8B0000;
+  color: white;
+  padding: 1em 2em;
+  border-radius: 10px;
+
+}
+
+.currency-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-right: 2em; */
+}
+
+.country {
+  text-align: center;
+  margin-right: 2em;
+}
+
+.text-details {
+  text-align: center;
+  margin-right: 2em;
+}
+
+.value-input {
+  display: flex;
+}
+
+
+p {
+  margin: 0;
 }
