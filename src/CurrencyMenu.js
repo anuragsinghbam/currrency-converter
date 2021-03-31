@@ -42,8 +42,7 @@ export default function CurrencyMenu(props) {
           <input
             type='number'
             className={inputClass}
-            placeholder='Username'
-            aria-label='Username'
+            placeholder='Currency Value'
             aria-describedby='addon-wrapping'
             value={value}
             onChange={changeValue}
