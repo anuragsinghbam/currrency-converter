@@ -10,10 +10,14 @@ export default function CurrencyMenu(props) {
     countryName,
     value,
     changeValue,
+    currencyClass,
+    countryClass,
+    selectClass,
+    inputClass,
   } = props
 
   return (
-    <div className='currency-menu'>
+    <div className={currencyClass}>
       <div className='currency-details'>
         <div className='country'>
           <img src={flagUrl} alt={countryName + ' Flag'} />
@@ -21,21 +25,33 @@ export default function CurrencyMenu(props) {
         </div>
       </div>
 
-      <select value={currencyCode} onChange={changeCurrency}>
-        {currencyList.map((currency) => (
-          <option key={currency} value={currency}>
-            {currency}
-          </option>
-        ))}
-      </select>
-
       <div className='value-input'>
-        <div className='text-details'>
-          <p>{currencyCode}</p>
-          <p>{currencyName}</p>
+        <select
+          className={selectClass}
+          value={currencyCode}
+          onChange={changeCurrency}
+        >
+          {currencyList.map((currency) => (
+            <option key={currency} value={currency}>
+              {currency}
+            </option>
+          ))}
+        </select>
+
+        <div className='input-group flex-nowrap'>
+          <input
+            type='number'
+            className={inputClass}
+            placeholder='Username'
+            aria-label='Username'
+            aria-describedby='addon-wrapping'
+            value={value}
+            onChange={changeValue}
+          />
         </div>
-        <input type='number' value={value} onChange={changeValue} />
       </div>
+
+      <span className={countryClass}>{currencyName}</span>
     </div>
   )
 }

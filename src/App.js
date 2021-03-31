@@ -2,9 +2,11 @@ import './App.css'
 import React, { useEffect, useState } from 'react'
 import CurrencyMenu from './CurrencyMenu'
 
+// Fetch list of currencies
 const BASE_URL =
   'https://v6.exchangerate-api.com/v6/a707d1172e88c17d8379cd71/latest/'
 
+// Fetch extra details like, flag image, country name and currency name
 const ENRICHED_URL =
   'https://v6.exchangerate-api.com/v6/a707d1172e88c17d8379cd71/enriched/'
 
@@ -22,15 +24,17 @@ export default function App() {
   const [targetCurrencyValue, setTargetCurrencyValue] = useState(1)
   const [conversionRate, setConversionRate] = useState(73.1717)
   const [trackChange, setTrackChange] = useState(true)
-  
 
+  // This fucntion gets data from BASE_URL API and makes list (Array) of Currencies
   useEffect(() => {
-    fetch(BASE_URL + 'USD')
+    fetch(BASE_URL + sourceCurrencyCode)
       .then((res) => res.json())
       .then((data) => {
         setCurrencyList(Object.keys(data.conversion_rates))
       })
   }, [])
+
+  // This function gets data from second ENRICHED_URL API and populates details in the source currency section
 
   useEffect(() => {
     fetch(ENRICHED_URL + sourceCurrencyCode + '/' + sourceCurrencyCode)
@@ -41,9 +45,13 @@ export default function App() {
         setSourceCountryName(data.target_data.locale)
         setSourceCurrencyCode(data.target_code)
         if (trackChange) {
-          setTargetCurrencyValue(sourceCurrencyValue * conversionRate)
+          setTargetCurrencyValue(
+            (sourceCurrencyValue * conversionRate).toFixed(4)
+          )
         } else {
-          setSourceCurrencyValue(targetCurrencyValue / conversionRate)
+          setSourceCurrencyValue(
+            (targetCurrencyValue / conversionRate).toFixed(4)
+          )
         }
       })
   }, [
@@ -53,6 +61,8 @@ export default function App() {
     sourceCurrencyValue,
     targetCurrencyValue,
   ])
+
+  // This function gets data from second ENRICHED_URL API and populates details in the target currency section
 
   useEffect(() => {
     fetch(ENRICHED_URL + sourceCurrencyCode + '/' + targetCurrencyCode)
@@ -92,6 +102,9 @@ export default function App() {
 
   return (
     <div className='App'>
+
+    <h3>Currency Converter</h3>
+
       <CurrencyMenu
         flagUrl={sourceCountryFlag}
         currencyName={sourceCurrencyName}
@@ -101,7 +114,16 @@ export default function App() {
         countryName={sourceCountryName}
         value={sourceCurrencyValue}
         changeValue={changeSourceCurrencyValue}
+        currencyClass={'source-currency currency-menu'}
+        countryClass={'input-group-text country-name source-country'}
+        selectClass={'form-select currency-select source-currency-select'}
+        inputClass={'form-control currency-input source-input'}
       />
+
+      <div className='updown-arrow'>
+        <img src='updown-arrow.svg' />
+      </div>
+
       <CurrencyMenu
         flagUrl={targetCountryFlag}
         currencyName={targetCurrencyName}
@@ -111,6 +133,10 @@ export default function App() {
         countryName={targetCountryName}
         value={targetCurrencyValue}
         changeValue={changeTargetCurrencyValue}
+        currencyClass={'target-currency currency-menu'}
+        countryClass={'input-group-text country-name target-country'}
+        selectClass={'form-select currency-select target-currency-select'}
+        inputClass={'form-control currency-input target-input'}
       />
     </div>
   )
