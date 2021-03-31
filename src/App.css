@@ -92,7 +92,7 @@ h3 {
   margin: 2em auto;
   border-radius: 50%;
   box-shadow: 0px 0px 10px rgba(59, 173, 253, 0.4);
-  animation: rotate 0.3s ease-in-out 1;
+  animation: push 0.3s ease-in-out 1;
 }
 
 .updown-arrow img {
