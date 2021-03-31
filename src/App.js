@@ -12,12 +12,12 @@ const ENRICHED_URL =
 
 export default function App() {
   const [currencyList, setCurrencyList] = useState([])
-  const [sourceCurrencyName, setSourceCurrencyName] = useState('')
-  const [targetCurrencyName, setTargetCurrencyName] = useState('')
-  const [sourceCountryFlag, setSourceCountryFlag] = useState('')
-  const [targetCountryFlag, setTargetCountryFlag] = useState('')
-  const [sourceCountryName, setSourceCountryName] = useState('')
-  const [targetCountryName, setTargetCountryName] = useState('')
+  const [sourceCurrencyName, setSourceCurrencyName] = useState('United States Dollar')
+  const [targetCurrencyName, setTargetCurrencyName] = useState('Indian Rupee')
+  const [sourceCountryFlag, setSourceCountryFlag] = useState('US.gif')
+  const [targetCountryFlag, setTargetCountryFlag] = useState('IN.gif')
+  const [sourceCountryName, setSourceCountryName] = useState('United States')
+  const [targetCountryName, setTargetCountryName] = useState('India')
   const [sourceCurrencyCode, setSourceCurrencyCode] = useState('USD')
   const [targetCurrencyCode, setTargetCurrencyCode] = useState('INR')
   const [sourceCurrencyValue, setSourceCurrencyValue] = useState(1)

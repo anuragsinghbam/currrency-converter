@@ -1,7 +1,5 @@
 body {
   min-height: 100vh;
-  display: grid;
-  place-items: center; 
 }
 
 .App {
@@ -14,8 +12,10 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  max-width: 900px;
-
+  max-width: 1080px;
+  position: absolute;
+  top: 50%; right: 50%;
+  transform: translate(50%,-50%);
 }
 
 h3 {
@@ -92,6 +92,7 @@ h3 {
   margin: 2em auto;
   border-radius: 50%;
   box-shadow: 0px 0px 10px rgba(59, 173, 253, 0.4);
+  animation: rotate 0.3s ease-in-out 1;
 }
 
 .updown-arrow img {
